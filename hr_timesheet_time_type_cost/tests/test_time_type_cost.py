@@ -64,6 +64,14 @@ class TestTimeTypeCost(BaseCommon):
         self.assertEqual(line.amount, -62.0)
         self.assertEqual(self._create_line(self.type_fixed).amount, -80.0)
 
+    def test_rewriting_the_same_time_type_does_not_reprice(self):
+        line = self._create_line(self.type_ratio)
+        self.type_ratio.cost_ratio = 2.0
+        self.employee.hourly_cost = 100.0
+        line.write({"time_type_id": self.type_ratio.id})
+        self.assertEqual(line.amount, -225.0)
+        self.assertEqual(line.time_type_cost_ratio, 1.5)
+
     def test_constraints(self):
         with self.assertRaises(ValidationError):
             self.env["project.time.type"].create(
