@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 ======================
 Time Type in Timesheet
 ======================
@@ -13,7 +17,7 @@ Time Type in Timesheet
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Ftimesheet-lightgray.png?logo=github
@@ -34,6 +38,11 @@ identify the nature of task based on the timesheet entries.
 Time Type is also useful for weekly or monthly reporting provided to
 clients based on exports from the PM System to provide high level
 classifications for timesheet logs.
+
+Time Types are company-aware and archivable: a type belongs to a
+company, or is shared across companies when the company is left empty.
+An obsolete type can be archived instead of deleted, so the timesheet
+lines that already use it keep their classification.
 
 **Table of contents**
 
