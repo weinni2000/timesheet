@@ -55,13 +55,24 @@ class AccountAnalyticLine(models.Model):
         return super().create(prepared_vals_list)
 
     def write(self, values):
-        if "time_type_id" in values:
+        if "time_type_id" not in values:
+            return super().write(values)
+        # Only lines whose time type really changes take the current rule of
+        # the time type and are repriced. Writing the same time type again
+        # (mass edit, import, API) must not reprice historic lines.
+        time_type_id = values["time_type_id"] or False
+        unchanged = self.filtered(lambda line: line.time_type_id.id == time_type_id)
+        changed = self - unchanged
+        result = True
+        other_values = {k: v for k, v in values.items() if k != "time_type_id"}
+        if unchanged and other_values:
+            result = super(AccountAnalyticLine, unchanged).write(other_values)
+        if changed:
             values = dict(values)
-            for key, value in self._time_type_cost_snapshot(
-                values["time_type_id"]
-            ).items():
+            for key, value in self._time_type_cost_snapshot(time_type_id).items():
                 values.setdefault(key, value)
-        return super().write(values)
+            result = super(AccountAnalyticLine, changed).write(values) and result
+        return result
 
     def _timesheet_postprocess_values(self, values):
         # Core only recomputes the amount when one of its own cost inputs
